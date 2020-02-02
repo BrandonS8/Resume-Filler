@@ -2,7 +2,7 @@
   "name": "Resume Filler",
   "version": "0.1",
   "description": "An open source chrome extension to copy and paste parts of your resume easier. Making online job applications easier.",
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "storage"],
   "browser_action": {
     "default_title": "Set this page's color.",
     "default_icon": "icon.png",
