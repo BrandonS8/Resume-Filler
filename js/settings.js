@@ -4,9 +4,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var firstName = document.querySelector('#rf-firstName')
   var lastName = document.querySelector('#rf-lastName')
+  var shortIntro = document.querySelector('#rf-shortIntro')
 
   var resume = {
-    firstName: 'FirstName'
+    firstName: 'First Name',
+    lastName: 'Last Name',
+    shortIntro: 'Short Introduction'
   }
 
   // Get settings from chrome storage api
@@ -20,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function updateInputValues() {
     firstName.value = resume.firstName
     lastName.value = resume.lastName
+    shortIntro.value = resume.shortIntro
   }
 
   // Add Event Listeners to Inputs
@@ -29,6 +33,11 @@ document.addEventListener('DOMContentLoaded', function() {
   lastName.addEventListener('input', function(e) {
     resume.lastName = e.target.value
   })
+  shortIntro.addEventListener('input', function(e) {
+    console.log('here')
+    resume.shortIntro = e.target.value
+  })
+
   save.addEventListener('click', function() {
     chrome.storage.sync.set({ rfResumeSettings: resume }, function() {
       // on save

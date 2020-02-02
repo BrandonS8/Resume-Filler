@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var firstName = document.querySelector('#rf-firstName')
   var lastName = document.querySelector('#rf-lastName')
+  var shortIntro = document.querySelector('#rf-shortIntro')
 
   var resume = {}
 
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function updateValues() {
     firstName.value = resume.firstName
     lastName.value = resume.lastName
+    shortIntro.value = resume.shortIntro
   }
 
   // Copy Text Field
@@ -25,11 +27,13 @@ document.addEventListener('DOMContentLoaded', function() {
     var text = el.currentTarget.previousElementSibling
     text.select()
     document.execCommand('copy')
-    var copiedText = el.currentTarget.children[1]
-    copiedText.innerHTML = 'Copied!'
+    var copiedIcon = el.currentTarget.children[0].children[0]
+    copiedIcon.classList.remove('fa-clipboard')
+    copiedIcon.classList.add('fa-check')
     setTimeout(function() {
-      copiedText.innerHTML = 'Copy'
-    }, 800)
+      copiedIcon.classList.remove('fa-check')
+      copiedIcon.classList.add('fa-clipboard')
+    }, 1000)
   }
 
   copyButtons.forEach(function(b) {

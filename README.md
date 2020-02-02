@@ -10,3 +10,4 @@ Made because online job applications never properly parse resumes and it can tak
 - Auto fill
 - JSON Import / Export (for additional backup option and useful for devs, even though it saves to google not locally)
 - Cover letter with automatic variables (i.e. company name)
+- Auto resume importer (have I become the very thing I sought to destroy?)
