@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
   var loadingScreen = document.querySelector('#rf-loading')
-  var firstName = document.querySelector('#rf-firstName')
   var save = document.querySelector('#rf-save')
+
+  var firstName = document.querySelector('#rf-firstName')
+  var lastName = document.querySelector('#rf-lastName')
 
   var resume = {
     firstName: 'FirstName'
@@ -9,26 +11,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Get settings from chrome storage api
   chrome.storage.sync.get(['rfResumeSettings'], function(result) {
-    console.log(result.rfResumeSettings)
     resume = result.rfResumeSettings
     loadingScreen.style.display = 'none'
     updateInputValues()
   })
 
+  // Update Displayed Values
   function updateInputValues() {
-    console.log(resume)
-    console.log('update inputs')
     firstName.value = resume.firstName
+    lastName.value = resume.lastName
   }
 
+  // Add Event Listeners to Inputs
   firstName.addEventListener('input', function(e) {
     resume.firstName = e.target.value
-    console.log(resume)
+  })
+  lastName.addEventListener('input', function(e) {
+    resume.lastName = e.target.value
   })
   save.addEventListener('click', function() {
     chrome.storage.sync.set({ rfResumeSettings: resume }, function() {
-      console.log('Value is set to ' + resume)
-      console.log(resume.firstName)
+      // on save
     })
   })
 })

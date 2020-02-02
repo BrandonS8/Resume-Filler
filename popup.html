@@ -4,11 +4,42 @@
     <title>Resume Filler</title>
     <link rel="stylesheet" href="css/shared-styles.css" />
     <link rel="stylesheet" href="css/popup.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="dependencies/fontawesome/css/all.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="dependencies/bulma.min.css" />
+    <script src="dependencies/fontawesome.min.js"></script>
   </head>
-  <body>
+  <body class="has-text-white">
+    <div id="rf-loading" class="fullscreen-cover">
+      <p>Loading...</p>
+    </div>
     <div class="rf-container">
-      <h1>Resume Filler</h1>
-      <a id="rf-settings-button" href="settings.html">Settings</a>
+      <div class="rf-top">
+        <h1 class="has-text-grey-light">Resume Filler</h1>
+        <a id="rf-settings-button" href="settings.html" class="has-text-info">
+          <span> <i class="fas fa-cog"></i></span>
+        </a>
+      </div>
+      <div class='field'>
+        <label class="label has-text-white">First Name</label>
+        <div class='rf-copy-text-wrap'>
+        <input class="input" type='text' id='rf-firstName' placeholder="First Name" readonly></input>
+        <a class='rf-copy-button has-text-success'><span class="icon">
+          <i class="fas fa-clipboard"></i>
+        </span> <span class='rf-copy-button-text'>Copy</span></a>
+      </div>
+      </div>
+      <div class='field'>
+        <label class="label has-text-white">Last Name</label>
+        <div class='rf-copy-text-wrap'>
+        <input class="input" type='text' id='rf-lastName' placeholder="Last Name" readonly></input>
+        <a class='rf-copy-button has-text-success'><span class="icon">
+          <i class="fas fa-clipboard"></i>
+        </span> <span class='rf-copy-button-text'>Copy</span></a>
+      </div>
     </div>
     <script src="js/popup.js"></script>
   </body>

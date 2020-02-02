@@ -4,15 +4,30 @@
     <title>Resume Filler Settings</title>
     <link rel="stylesheet" href="css/shared-styles.css">
     <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" type="text/css" href="dependencies/fontawesome/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="dependencies/bulma.min.css" />
   </head>
-  <body>
+  <body class='has-text-white'>
+    <div id="rf-loading" class="fullscreen-cover">
+      <p>Loading...</p>
+      <progress class="progress is-info" max="100">60%</progress>
+    </div>
     <div class="rf-container">
-      <div id='rf-loading'><h1>LOADING</h1></div>
-      <h1>Resume Filler</h1>
-      <h3>Settings</h3>
-      <a id="rf-home-button" href="popup.html">Home</a>
-      <input type='text' id='rf-firstName' placeholder="First Name"></input>
-      <button id='rf-save'>Save</button>
+      <div class="rf-top">
+        <h1 class='has-text-grey-light'>Resume Filler - Settings</h1>
+        <a id="rf-home-button" href="popup.html" class='has-text-info'><span class="icon">
+          <i class="fas fa-home"></i>
+        </span> Home</a>
+      </div>
+      <div class='field'>
+        <label class="label has-text-white">First Name</label>
+        <input class="input" type='text' id='rf-firstName' placeholder="First Name"></input>
+      </div>
+      <div class='field'>
+        <label class="label has-text-white">Last Name</label>
+        <input class="input" type='text' id='rf-lastName' placeholder="Last Name"></input>
+      </div>
+      <button id='rf-save' class='button is-success'>Save</button>
     </div>
     <script src="js/settings.js"></script>
   </body>
