@@ -8,6 +8,10 @@ body {
   font-size: 18px;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 .fullscreen-cover {
   background: #1f2128;
   width: 100%;
