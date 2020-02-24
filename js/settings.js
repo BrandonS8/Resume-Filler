@@ -10,10 +10,12 @@ document.addEventListener('DOMContentLoaded', function() {
     firstName: 'First Name',
     lastName: 'Last Name',
     shortIntro: 'Short Introduction',
-    experience: []
+    experience: [],
+    education: []
   }
-
+  // https://developer.chrome.com/apps/storage
   // Get settings from chrome storage api
+
   chrome.storage.sync.get(['rfResumeSettings'], function(result) {
     const entries = Object.entries(result.rfResumeSettings)
     entries.forEach(e => {
@@ -21,10 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     loadingScreen.style.display = 'none'
     updateInputValues()
-    setupAccordions(
-      document.querySelector('.accordion-container.experience-container'),
-      resume.experience
-    )
+    setupAccordions()
   })
 
   // Update Displayed Values
@@ -42,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
     resume.lastName = e.target.value
   })
   shortIntro.addEventListener('input', function(e) {
-    console.log('here')
     resume.shortIntro = e.target.value
   })
 
@@ -53,121 +51,208 @@ document.addEventListener('DOMContentLoaded', function() {
   })
 
   // accordion stuff:
-
   // an accordion without jQuery?? What!?
-  var accordionSample = document.querySelector('.accordion-first')
-  var accordionContainer = document.querySelector('.accordion-container')
 
-  var addExpAccordionButton = document.querySelector('#add-button-exp')
+  class DynamicAccordion {
+    constructor(name, container, elToCopy, addButton, data) {
+      this.name = name
+      this.container = container
+      this.elToCopy = elToCopy
+      this.addButton = addButton
+      this.data = data
+      this.lastID = 0
 
-  var accordionContainerBot = document.querySelector(
-    '.accordion-container-bottom'
-  )
+      // Binding the context
+      this.addAccordion = this.addAccordion.bind(this)
+      this.initAccordion = this.initAccordion.bind(this)
+      this.removeAccordion = this.removeAccordion.bind(this)
+      this.updateData = this.updateData.bind(this)
 
-  function initAccordion(el, existingIndex) {
-    var index = 0
-    if (typeof existingIndex != 'undefined') {
-      index = existingIndex
-    } else {
-      index = resume.experience.push({}) - 1
-      resume.experience[index].index = index
+      this.setup = this.setup.bind(this)
+      this.setup()
     }
-    var toggle = el.children[0]
-    var remover = el.querySelector('.accordion-close')
-    var content = el.children[1]
-    remover.addEventListener('click', function(e) {
-      var c = confirm('Delete?')
-      if (c == true) {
-        removeAccordion(el, resume.experience, index)
-      } else {
-      }
-      e.stopPropagation()
-    })
-    toggle.addEventListener('click', function(e) {
-      console.log('click')
-      toggle.classList.add('active')
-      if (content.style.maxHeight) {
-        content.style.maxHeight = null
-      } else {
-        content.style.maxHeight = content.scrollHeight + 'px'
-      }
-    })
 
-    content.querySelectorAll('input, textarea').forEach(input => {
-      input.addEventListener('input', function(e) {
-        console.log(resume.experience)
-        console.log(index)
-        resume.experience[index][e.currentTarget.name] = e.currentTarget.value
-        console.log(resume.experience)
-        if (e.currentTarget.name === 'title') {
-          toggle.children[0].innerHTML = e.currentTarget.value
-        }
-      })
-    })
-    // resume.experience.push(data)
-  }
-
-  function addDataToAccordion(accordion, data) {
-    // first child is toggle row then get p tag inside that
-    if (data.title) {
-      accordion.children[0].children[0].innerHTML = data.title
+    getNewID() {
+      this.lastID += 1
+      if (
+        this.container.querySelector(
+          '.accordion[data-accordion-id="' + this.lastID + '"]'
+        )
+      ) {
+        this.getNewID()
+      } else {
+        return this.lastID
+      }
     }
-    // second child is content
-    accordion.children[1].querySelectorAll('input, textarea').forEach(input => {
-      if (data[input.name]) {
-        input.value = data[input.name]
-      } else {
-        input.value = ''
-      }
-    })
-  }
-
-  function setupAccordions(container, arr) {
-    console.log(arr)
-    var first = container.querySelector('.accordion')
-    if (arr[0]) {
-      initAccordion(first, arr[0].index)
-    } else {
-      initAccordion(first)
-    }
-    if (arr.length === 1) {
-      addDataToAccordion(first, resume.experience[0])
-    } else if (arr.length > 1) {
-      console.log(arr)
-      addDataToAccordion(first, arr[0])
-      arr.forEach(function(item, index) {
-        if (index > 0) {
-          addAccordion(container, arr[index])
-        }
+    initAddButton() {
+      var context = this
+      this.addButton.addEventListener('click', function() {
+        context.addAccordion()
       })
     }
-  }
 
-  function addAccordion(container, data) {
-    var clone = accordionSample.cloneNode(true)
-    var containerBot = container.querySelector('.accordion-container-bottom')
-    container.insertBefore(clone, containerBot)
-    if (data && data.index) {
-      clone.children[1].style.maxHeight = null
-      addDataToAccordion(clone, data)
-      initAccordion(clone, data.index)
-    } else {
+    initAccordion(id, entry) {
+      var context = this
+      var accordion = this.container.querySelector(
+        '.accordion[data-accordion-id="' + id + '"]'
+      )
+      if (entry) {
+        entry.accordionID = id
+      } else {
+        this.data.push({ accordionID: id })
+      }
+
+      var toggle = accordion.children[0]
+      var remover = accordion.querySelector('.accordion-close')
+      var content = accordion.children[1]
+      content.querySelector('input.accordion-id-field').value = id
+      remover.addEventListener('click', function(e) {
+        var c = confirm('Delete?')
+        if (c == true) {
+          context.removeAccordion(id)
+        } else {
+          console.log('remove cancelled')
+        }
+        e.stopPropagation()
+      })
+      toggle.addEventListener('click', function(e) {
+        toggle.classList.add('active')
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null
+        } else {
+          content.style.maxHeight = content.scrollHeight + 'px'
+        }
+      })
+      content.querySelectorAll('input, textarea').forEach(input => {
+        input.addEventListener('input', function(e) {
+          context.data.forEach(function(item, index, arr) {
+            if (item.accordionID == id) {
+              arr[index][e.currentTarget.name] = e.currentTarget.value
+            }
+          })
+
+          if (e.currentTarget.name === 'title') {
+            toggle.children[0].innerHTML = e.currentTarget.value
+          }
+          context.updateData()
+        })
+      })
+    }
+
+    addAccordion(entry) {
+      var id = this.getNewID()
+      var clone = this.elToCopy.cloneNode(true)
+      clone.classList.remove('accordion-first')
+      clone.dataset.accordionId = id
+      var containerBot = this.container.querySelector(
+        '.accordion-container-bottom'
+      )
+      this.container.insertBefore(clone, containerBot)
+
+      clone.children[0].children[0].innerHTML = 'Click to toggle'
+      clone.children[1]
+        .querySelectorAll('input, textarea')
+        .forEach(function(input) {
+          if (input.name != 'accordionID') {
+            input.value = ''
+          }
+        })
       clone.children[1].style.maxHeight = clone.children[1].scrollHeight + 'px'
-      initAccordion(clone)
+      if (entry) {
+        clone.children[1].style.maxHeight = null
+        this.initAccordion(id, entry)
+      } else {
+        this.initAccordion(id)
+      }
+
+      return id
+    }
+    removeAccordion(id) {
+      var context = this
+      var accordion = this.container.querySelector(
+        '.accordion[data-accordion-id="' + id + '"]'
+      )
+      this.data.forEach(function(item, index, arr) {
+        if (item.accordionID == id) {
+          context.data.splice(index, 1)
+        }
+      })
+      accordion.remove()
+      context.updateData()
+    }
+
+    addDataToAccordion(id, data) {
+      var accordion = this.container.querySelector(
+        '.accordion[data-accordion-id="' + id + '"]'
+      )
+      // first child is toggle row then get p tag inside that
+      if (data.title) {
+        accordion.children[0].children[0].innerHTML = data.title
+      }
+      // second child is content
+      accordion.children[1]
+        .querySelectorAll('input, textarea')
+        .forEach(input => {
+          if (input.name == 'accordionID') {
+            return
+          }
+          if (data[input.name]) {
+            input.value = data[input.name]
+          } else {
+            input.value = ''
+          }
+        })
+    }
+    setup() {
+      var context = this
+      var data = this.data
+      if (data.length > 0) {
+        data.forEach(function(entry, index) {
+          if (index === 0) {
+            context.initAccordion(0, entry)
+            context.addDataToAccordion(0, entry)
+          } else {
+            var newID = context.addAccordion(entry)
+            context.addDataToAccordion(newID, entry)
+          }
+        })
+      } else {
+        context.initAccordion(0)
+      }
+      context.initAddButton()
+    }
+    updateData() {
+      resume[this.name] = this.data
     }
   }
 
-  addExpAccordionButton.addEventListener('click', function() {
-    addAccordion(
-      document.querySelector('.accordion-container.experience-container')
+  function setupAccordions() {
+    // SETUP EXPERIENCE ACCORDION
+    var expContainer = document.querySelector('.experience-container')
+    var firstExp = expContainer.querySelector('.accordion-first')
+    var addExp = document.querySelector('#add-button-exp')
+    // name, container, elToCopy, addButton, data
+    var experienceAccordion = new DynamicAccordion(
+      'experience',
+      expContainer,
+      firstExp,
+      addExp,
+      resume.experience ? resume.experience : []
     )
-  })
 
-  function removeAccordion(accordion, arr, index) {
-    arr.splice(index, 1)
-    console.log(arr)
-    accordion.remove()
+    // SETUP EDUCATION ACCORDION
+    var eduContainer = document.querySelector('.education-container')
+    var firstEdu = eduContainer.querySelector('.accordion-first')
+    var addEdu = document.querySelector('#add-button-edu')
+    // name, container, elToCopy, addButton, data
+    var educationAccordion = new DynamicAccordion(
+      'education',
+      eduContainer,
+      firstEdu,
+      addEdu,
+      resume.education ? resume.education : []
+    )
   }
-})
 
-// https://developer.chrome.com/apps/storage
+  // end of on doc ready
+})
