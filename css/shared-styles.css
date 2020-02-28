@@ -54,3 +54,44 @@ body {
   align-items: center;
   padding-left: 0.2em;
 }
+.accordion-container-label {
+  margin-top: 0.75rem;
+}
+.accordion-container {
+  max-width: 100%;
+  overflow: hidden;
+  margin: 0 auto;
+}
+.accordion {
+  margin-top: 0.3em;
+}
+.accordion .field {
+  margin-top: 0.75rem;
+}
+.accordion:nth-of-type(1) .accordion-toggle .accordion-close {
+  display: none;
+}
+.accordion .accordion-toggle {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.2em;
+  cursor: pointer;
+  color: #fff;
+  border-left: 4px solid #363636;
+  border-radius: 4px;
+}
+
+.accordion .accordion-toggle:hover {
+  border-left: 8px solid #207dbc;
+}
+.accordion .accordion-toggle .accordion-close {
+  z-index: 3;
+}
+
+.accordion .accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  margin-left: 8px;
+  margin-bottom: 0.75rem;
+}
