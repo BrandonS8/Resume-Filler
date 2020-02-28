@@ -60,7 +60,7 @@ body {
 .accordion-container {
   max-width: 100%;
   overflow: hidden;
-  margin: 0 auto;
+  margin: 0 auto 0.75rem;
 }
 .accordion {
   margin-top: 0.3em;

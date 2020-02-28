@@ -1,0 +1,15 @@
+.rf-save-wrap {
+  width: 100%;
+  padding: 1em;
+  position: fixed;
+  bottom: 0;
+  background: #1f2128;
+}
+
+#rf-save {
+  width: 100%;
+  height: 2.5em;
+}
+.rf-container {
+  padding-bottom: calc(3em + 0.75rem);
+}

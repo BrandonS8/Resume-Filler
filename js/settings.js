@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
   var shortIntro = document.querySelector('#rf-shortIntro')
 
   var resume = {
-    firstName: 'First Name',
-    lastName: 'Last Name',
-    shortIntro: 'Short Introduction',
+    firstName: '',
+    lastName: '',
+    shortIntro: '',
     experience: [],
     education: []
   }
@@ -46,7 +46,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   save.addEventListener('click', function() {
     chrome.storage.sync.set({ rfResumeSettings: resume }, function() {
-      // on save
+      save.innerHTML = 'Saved!'
+      setTimeout(function() {
+        save.innerHTML = 'Save'
+      }, 1800)
     })
   })
 

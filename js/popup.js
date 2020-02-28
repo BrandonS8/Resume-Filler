@@ -16,9 +16,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Update Displayed Values
   function updateValues() {
-    firstName.value = resume.firstName
-    lastName.value = resume.lastName
-    shortIntro.value = resume.shortIntro
+    firstName.value = resume.firstName || 'Not Set'
+    lastName.value = resume.lastName || 'Not Set'
+    shortIntro.value = resume.shortIntro || 'Not Set'
     setupAccordions()
   }
 
@@ -173,27 +173,52 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function setupAccordions() {
+    console.log(resume)
     // SETUP EXPERIENCE ACCORDION
     var expContainer = document.querySelector('.experience-container')
     var firstExp = expContainer.querySelector('.accordion-first')
-    // name, container, elToCopy, addButton, data
-    var experienceAccordion = new DynamicAccordion(
-      'experience',
-      expContainer,
-      firstExp,
-      resume.experience ? resume.experience : []
-    )
+    if (resume.experience) {
+      if (
+        resume.experience.length === 1 &&
+        Object.keys(resume.experience[0]).length < 2
+      ) {
+        expContainer.innerHTML = '<p>No Data, add experience in settings!</p>'
+      } else {
+        // name, container, elToCopy,data
+        var experienceAccordion = new DynamicAccordion(
+          'experience',
+          expContainer,
+          firstExp,
+          resume.experience ? resume.experience : []
+        )
+      }
+    } else {
+      expContainer.innerHTML = '<p>No Data, add experience in settings!</p>'
+    }
 
     // SETUP EDUCATION ACCORDION
     var eduContainer = document.querySelector('.education-container')
     var firstEdu = eduContainer.querySelector('.accordion-first')
-    // name, container, elToCopy, addButton, data
-    var educationAccordion = new DynamicAccordion(
-      'education',
-      eduContainer,
-      firstEdu,
-      resume.education ? resume.education : []
-    )
+    if (resume.education) {
+      console.log(Object.keys(resume.education[0]).length)
+      if (
+        resume.education.length === 1 &&
+        Object.keys(resume.education[0]).length < 2
+      ) {
+        eduContainer.innerHTML = '<p>No Data, add education in settings!</p>'
+      } else {
+        // name, container, elToCopy, data
+        var educationAccordion = new DynamicAccordion(
+          'education',
+          eduContainer,
+          firstEdu,
+          resume.education ? resume.education : []
+        )
+      }
+    } else {
+      console.log('here2')
+      eduContainer.innerHTML = '<p>No Data, add education in settings!</p>'
+    }
   }
 
   // End of on content loaded
