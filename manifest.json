@@ -4,7 +4,7 @@
   "description": "An open source chrome extension to copy and paste parts of your resume easier. Making online job applications easier.",
   "permissions": ["activeTab", "storage"],
   "browser_action": {
-    "default_title": "Set this page's color.",
+    "default_title": "View and Edit Saved Resume.",
     "default_icon": "icon.png",
     "default_popup": "popup.html"
   },
